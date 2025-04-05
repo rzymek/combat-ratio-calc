@@ -36,7 +36,9 @@ function Foo(props: { label: string, values: Line[] }) {
         <div style={{display: 'flex', flexDirection: 'row'}}>
             {props.values.map((line, index) =>
                 <div key={index} style={{display: 'flex', gap: '1mm', flex: 1}}>
-                    <Button style={{width: 'auto', minWidth: '10mm'}}>{sum(line.values)} =</Button>
+                    <Button style={{width: 'auto', minWidth: '10mm'}} onClick={update(()=>{
+                        line.values.splice(0, line.values.length)
+                    })}>{sum(line.values)} =</Button>
                     {line.values.map((v, index) =>
                         <Button key={index}>
                             {v}
@@ -44,8 +46,7 @@ function Foo(props: { label: string, values: Line[] }) {
                 </div>
             )}
             <div style={{display: 'flex', gap: '1mm'}}>
-                <Button>½↓</Button>
-                <Button>½↑</Button>
+                <Button>½</Button>
             </div>
         </div>
         <div style={{display: 'flex', gap: '1mm', flex: 1}}>
