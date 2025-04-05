@@ -29,6 +29,9 @@ importers:
       preact:
         specifier: ^10.26.4
         version: 10.26.4
+      remeda:
+        specifier: ^2.21.2
+        version: 2.21.2
       typescript:
         specifier: ^5.8.2
         version: 5.8.3
@@ -2120,6 +2123,9 @@ packages:
     resolution: {integrity: sha512-dQUtn90WanSNl+7mQKcXAgZxvUe7Z0SqXlgzv0za4LwiUhyzBC58yQO3liFoUgu8GiJVInAhJjkj1N0EtQ5nkQ==}
     hasBin: true
 
+  remeda@2.21.2:
+    resolution: {integrity: sha512-wdhkMDou8HRpD7RnxKJ/FHJWEGXRH7jV/pb0NsdLLSoBo+G9RjtxcY41hVhogLfEMkThk6aySKjs+Yd6PnpzBA==}
+
   require-from-string@2.0.2:
     resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
     engines: {node: '>=0.10.0'}
@@ -2397,6 +2403,10 @@ packages:
   type-fest@0.16.0:
     resolution: {integrity: sha512-eaBzG6MxNzEn9kiwvtre90cXaNLkmadMWa1zQMs3XORCXNbsH/OewwbxC5ia9dCxIxnTAsSxXJaa/p5y8DlvJg==}
     engines: {node: '>=10'}
+
+  type-fest@4.39.1:
+    resolution: {integrity: sha512-uW9qzd66uyHYxwyVBYiwS4Oi0qZyUqwjU+Oevr6ZogYiXt99EOYtwvzMSLw1c3lYo2HzJsep/NB23iEVEgjG/w==}
+    engines: {node: '>=16'}
 
   typed-array-buffer@1.0.0:
     resolution: {integrity: sha512-Y8KTSIglk9OZEr8zywiIHG/kmQ7KWyjseXs1CbSo8vC42w7hg2HgYTxSWwP0+is7bWDc1H+Fo026CpHFwm8tkw==}
@@ -4853,6 +4863,10 @@ snapshots:
     dependencies:
       jsesc: 0.5.0
 
+  remeda@2.21.2:
+    dependencies:
+      type-fest: 4.39.1
+
   require-from-string@2.0.2: {}
 
   resolve@1.22.8:
@@ -5195,6 +5209,8 @@ snapshots:
     optional: true
 
   type-fest@0.16.0: {}
+
+  type-fest@4.39.1: {}
 
   typed-array-buffer@1.0.0:
     dependencies:

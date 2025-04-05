@@ -1,5 +1,12 @@
-import { render } from 'preact'
-import { App } from './app.tsx'
+import {render} from 'preact'
 import './index.css'
+import {App} from "./app.tsx";
 
-render(<App />, document.getElementById('app')!)
+const app = document.getElementById('app');
+
+
+export function rerender() {
+    app && render(<App/>, app)
+}
+
+rerender();
