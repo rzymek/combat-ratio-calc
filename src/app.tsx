@@ -1,5 +1,5 @@
 import './app.css'
-import {map, pipe, range, sum} from "remeda";
+import {clone, isDeepEqual, map, pipe, range, sum} from "remeda";
 import {Button} from "./ui/Button.tsx";
 import {state} from "./state.ts";
 import {update} from "./update.ts";
@@ -12,10 +12,31 @@ function add(v: number) {
     })
 }
 
+function nextToChangeRatio(tuple: [number, number], whichOne: 0 | 1, byWhat: 1 | -1) {
+    const modified = clone(tuple);
+    const initial = combatRatio(...tuple);
+    if (!initial.every(isFinite)) {
+        return tuple[whichOne];
+    }
+    do {
+        modified[whichOne] += byWhat;
+    } while (modified.every(x => x > 0) && isDeepEqual(initial, combatRatio(...modified)))
+    return modified[whichOne];
+}
+
+function Num(props: { children: number }) {
+    const x = props.children;
+    return <>{isFinite(x) ? x : <>&nbsp;</>}</>;
+}
+
 export function App() {
     const attacker = sum(state.attacker);
     const defender = sum(state.defender);
     const [attackerRatio, defenderRatio] = combatRatio(attacker, defender);
+    const attacker1 = nextToChangeRatio([attacker, defender], 0, -1)
+    const attacker2 = nextToChangeRatio([attacker, defender], 0, +1)
+    const defender1 = nextToChangeRatio([attacker, defender], 1, -1)
+    const defender2 = nextToChangeRatio([attacker, defender], 1, +1)
     return <div style={{display: 'flex', gap: '1mm', flexDirection: 'column', margin: '1.6mm', maxWidth: '100%'}}>
         <div style={{display: 'flex', gap: '1mm', flexWrap: 'wrap', justifyContent: 'flex-start'}}>
             {pipe(
@@ -26,12 +47,20 @@ export function App() {
             )}
         </div>
         <Proportion>
-            <>{attackerRatio}</>
-            <>{defenderRatio}</>
+            <Num>{attackerRatio}</Num>
+            <Num>{defenderRatio}</Num>
         </Proportion>
         <Proportion>
-            <>{attacker}</>
-            <>{defender}</>
+            <div style={{fontSize: '1cm'}}>
+                <div style={{fontSize: '50%'}}><Num>{attacker1}</Num></div>
+                <div>{attacker}</div>
+                <div style={{fontSize: '50%'}}><Num>{attacker2}</Num></div>
+            </div>
+            <div style={{fontSize: '1cm'}}>
+                <div style={{fontSize: '50%'}}><Num>{defender1}</Num></div>
+                <div>{defender}</div>
+                <div style={{fontSize: '50%'}}><Num>{defender2}</Num></div>
+            </div>
         </Proportion>
         <div style={{
             display: 'flex',
@@ -50,7 +79,8 @@ export function App() {
         </div>
     </div>
 }
-function Proportion(props:{children:[ReactNode,ReactNode]}) {
+
+function Proportion(props: { children: [ReactNode, ReactNode] }) {
     return <div style={{display: 'flex', gap: '1mm', flexDirection: 'row', fontSize: '2cm', textAlign: 'center'}}>
         <SelectablePanel type='attacker'>
             {props.children[0]}
