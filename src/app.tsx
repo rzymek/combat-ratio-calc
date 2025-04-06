@@ -1,56 +1,123 @@
 import './app.css'
 import {map, pipe, range, sum} from "remeda";
 import {Button} from "./ui/Button.tsx";
-import {RoundedPanel} from "./ui/RoundedPanel.tsx";
-import {Line, state} from "./state.ts";
+import {state} from "./state.ts";
 import {update} from "./update.ts";
+import {ReactNode} from "preact/compat";
+import {combatRatio} from "./combatRatio.tsx";
 
 function add(v: number) {
     return update(() => {
-        state[state.selected][state.selectedLine].values.push(v)
+        state[state.selected].push(v)
     })
 }
 
 export function App() {
-    return <div style={{display: 'flex', gap: '1mm', flexDirection: 'column', margin: '1.6mm'}}>
-        <div style={{display: 'flex', gap: '1mm'}}>
+    const attacker = sum(state.attacker);
+    const defender = sum(state.defender);
+    const [attackerRatio, defenderRatio] = combatRatio(attacker, defender);
+    return <div style={{display: 'flex', gap: '1mm', flexDirection: 'column', margin: '1.6mm', maxWidth: '100%'}}>
+        <div style={{display: 'flex', gap: '1mm', flexWrap: 'wrap', justifyContent: 'flex-start'}}>
             {pipe(
-                range(1, 10 + 1),
+                range(1, 18 + 1),
                 map(v => {
                     return <Button key={v} onClick={add(v)}>{v}</Button>;
                 })
             )}
         </div>
-        <div style={{display: 'flex', gap: '1mm'}}>
-            {pipe(
-                range(11, 20 + 1),
-                map(v => <Button key={v} onClick={add(v)}>{v}</Button>)
-            )}
+        <Proportion>
+            <>{attackerRatio}</>
+            <>{defenderRatio}</>
+        </Proportion>
+        <Proportion>
+            <>{attacker}</>
+            <>{defender}</>
+        </Proportion>
+        <div style={{
+            display: 'flex',
+            gap: '1mm',
+            flexDirection: 'row',
+            textAlign: 'center',
+            justifyContent: 'center',
+            alignItems: 'stretch',
+        }}>
+            <SelectablePanel type='attacker'>
+                <RemovableList values={state.attacker}/>
+            </SelectablePanel>
+            <SelectablePanel type='defender'>
+                <RemovableList values={state.defender}/>
+            </SelectablePanel>
         </div>
-        <Foo label='Attacker' values={state.attacker}/>
+    </div>
+}
+function Proportion(props:{children:[ReactNode,ReactNode]}) {
+    return <div style={{display: 'flex', gap: '1mm', flexDirection: 'row', fontSize: '2cm', textAlign: 'center'}}>
+        <SelectablePanel type='attacker'>
+            {props.children[0]}
+        </SelectablePanel>
+        <div style={{textAlign: 'center'}}>
+            :
+        </div>
+        <SelectablePanel type='defender'>
+            {props.children[1]}
+        </SelectablePanel>
+    </div>
+
+}
+
+function SelectablePanel(props: { children: ReactNode, type: 'attacker' | 'defender' }) {
+    const color = {
+        attacker: '#f88',
+        defender: '#88f'
+    } as const;
+    return <div onClick={update(() => state.selected = props.type)} style={{
+        flex: 1,
+        background: color[props.type],
+        borderStyle: 'solid',
+        borderWidth: 5,
+        borderColor: state.selected === props.type ? 'blue' : 'transparent',
+        minHeight: '10mm',
+    }}>
+        {props.children}
     </div>
 }
 
-function Foo(props: { label: string, values: Line[] }) {
-    return <RoundedPanel label={props.label} style={{display: 'flex', flexDirection: 'column', gap: '1mm'}}>
-        <div style={{display: 'flex', flexDirection: 'row'}}>
-            {props.values.map((line, index) =>
-                <div key={index} style={{display: 'flex', gap: '1mm', flex: 1}}>
-                    <Button style={{width: 'auto', minWidth: '10mm'}} onClick={update(()=>{
-                        line.values.splice(0, line.values.length)
-                    })}>{sum(line.values)} =</Button>
-                    {line.values.map((v, index) =>
-                        <Button key={index}>
-                            {v}
-                        </Button>)}
-                </div>
-            )}
-            <div style={{display: 'flex', gap: '1mm'}}>
-                <Button>½</Button>
-            </div>
-        </div>
-        <div style={{display: 'flex', gap: '1mm', flex: 1}}>
-            <Button style={{width: 'auto', minWidth: '10mm'}}>+</Button>
-        </div>
-    </RoundedPanel>
+function RemovableList(props: { values: number[] }) {
+    return <div style={{
+        display: 'flex',
+        padding: '1mm',
+        alignContent: "center",
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        gap: "1mm",
+        width: '100%',
+    }}>
+        {props.values.map((v, index) =>
+            <Button key={index} onClick={update(() => props.values.splice(index, 1))}>{v}</Button>
+        )}
+    </div>
 }
+
+// function Foo(props: { label: string, values: Line[] }) {
+//     return <RoundedPanel label={props.label} style={{display: 'flex', flexDirection: 'column', gap: '1mm'}}>
+//         <div style={{display: 'flex', flexDirection: 'row'}}>
+//             {props.values.map((line, index) =>
+//                 <div key={index} style={{display: 'flex', gap: '1mm', flex: 1}}>
+//                     <Button style={{width: 'auto', minWidth: '10mm'}} onClick={update(() => {
+//                         line.values.splice(0, line.values.length)
+//                     })}>{sum(line.values)} =</Button>
+//                     {line.values.map((v, index) =>
+//                         <Button key={index}>
+//                             {v}
+//                         </Button>)}
+//                 </div>
+//             )}
+//             <div style={{display: 'flex', gap: '1mm'}}>
+//                 <Button>½</Button>
+//             </div>
+//         </div>
+//         <div style={{display: 'flex', gap: '1mm', flex: 1}}>
+//             <Button style={{width: 'auto', minWidth: '10mm'}}>+</Button>
+//         </div>
+//     </RoundedPanel>
+// }

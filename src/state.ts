@@ -1,17 +1,13 @@
 import {clone} from "remeda";
 
-export interface Line {
-    values: number[],
-    modifiers: {}
-}
 
 const initialState = {
-    attacker: [{values: [], modifiers: {}}] as Line[],
-    defender: [{values: [], modifiers: {}}] as Line[],
+    attacker: [] as number[],
+    defender: [] as number[],
     selected: 'attacker' as 'attacker' | 'defender',
     selectedLine: 0,
 
-} as const;
+};
 
 export const state = clone(initialState);
 
