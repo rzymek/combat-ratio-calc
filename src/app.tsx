@@ -21,7 +21,7 @@ function nextToChangeRatio(tuple: [number, number], whichOne: 0 | 1, byWhat: 1 |
     do {
         modified[whichOne] += byWhat;
     } while (modified.every(x => x > 0) && isDeepEqual(initial, combatRatio(...modified)))
-    return modified[whichOne];
+    return modified[whichOne] - initial[Which one];
 }
 
 function Num(props: { children: number }) {
