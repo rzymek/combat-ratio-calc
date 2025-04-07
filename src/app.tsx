@@ -14,14 +14,14 @@ function add(v: number) {
 
 function nextToChangeRatio(tuple: [number, number], whichOne: 0 | 1, byWhat: 1 | -1) {
     const modified = clone(tuple);
-    const initial = combatRatio(...tuple);
-    if (!initial.every(isFinite)) {
+    const initialRatio = combatRatio(...tuple);
+    if (!initialRatio.every(isFinite)) {
         return tuple[whichOne];
     }
     do {
         modified[whichOne] += byWhat;
-    } while (modified.every(x => x > 0) && isDeepEqual(initial, combatRatio(...modified)))
-    return modified[whichOne] - initial[whichOne];
+    } while (modified.every(x => x > 0) && isDeepEqual(initialRatio, combatRatio(...modified)))
+    return Math.abs(modified[whichOne] - tuple[whichOne]);
 }
 
 function Num(props: { children: number }) {
@@ -38,9 +38,9 @@ export function App() {
     const defender1 = nextToChangeRatio([attacker, defender], 1, -1)
     const defender2 = nextToChangeRatio([attacker, defender], 1, +1)
     return <div style={{display: 'flex', gap: '1mm', flexDirection: 'column', margin: '1.6mm', maxWidth: '100%'}}>
-        <div style={{display: 'flex', gap: '1mm', flexWrap: 'wrap', justifyContent: 'flex-start'}}>
+        <div style={{display: 'flex', gap: '1mm', flexWrap: 'wrap', justifyContent: 'flex-start', maxHeight: '21mm', overflow:'hidden'}}>
             {pipe(
-                range(1, 18 + 1),
+                range(1, 30 + 1),
                 map(v => {
                     return <Button key={v} onClick={add(v)}>{v}</Button>;
                 })
@@ -52,14 +52,14 @@ export function App() {
         </Proportion>
         <Proportion>
             <div style={{fontSize: '1cm'}}>
-                <div style={{fontSize: '50%'}}><Num>{attacker1}</Num></div>
+                <div style={{fontSize: '50%'}}>-<Num>{attacker1}</Num></div>
                 <div>{attacker}</div>
-                <div style={{fontSize: '50%'}}><Num>{attacker2}</Num></div>
+                <div style={{fontSize: '50%'}}>+<Num>{attacker2}</Num></div>
             </div>
             <div style={{fontSize: '1cm'}}>
-                <div style={{fontSize: '50%'}}><Num>{defender1}</Num></div>
+                <div style={{fontSize: '50%'}}>-<Num>{defender1}</Num></div>
                 <div>{defender}</div>
-                <div style={{fontSize: '50%'}}><Num>{defender2}</Num></div>
+                <div style={{fontSize: '50%'}}>+<Num>{defender2}</Num></div>
             </div>
         </Proportion>
         <div style={{
