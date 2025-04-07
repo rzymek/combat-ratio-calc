@@ -1,10 +1,12 @@
 import './app.css'
-import {clone, isDeepEqual, map, pipe, range, sum} from "remeda";
+import {clone, isDeepEqual, map, pipe, range, sum, filter} from "remeda";
 import {Button} from "./ui/Button.tsx";
 import {state} from "./state.ts";
 import {update} from "./update.ts";
 import {ReactNode} from "preact/compat";
 import {combatRatio} from "./combatRatio.tsx";
+
+const startFrom = 1;
 
 function add(v: number) {
     return update(() => {
@@ -40,7 +42,7 @@ export function App() {
     return <div style={{display: 'flex', gap: '1mm', flexDirection: 'column', margin: '1.6mm', maxWidth: '100%'}}>
         <div style={{display: 'flex', gap: '1mm', flexWrap: 'wrap', justifyContent: 'flex-start', maxHeight: '21mm', overflow:'hidden'}}>
             {pipe(
-                range(-5, 30 + 1),
+                range(startFrom, 30 + 1),
                 filter(v => v !== 0),
                 map(v => {
                     return <Button key={v} onClick={add(v)}>{v}</Button>;
