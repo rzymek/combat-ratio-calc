@@ -11,6 +11,7 @@ export function RemovableList(props: { values: number[] }) {
         gap: "1mm",
         width: '100%',
     }}>
+        <Button onClick={update(() => props.values.length = 0)}>X</Button>
         {props.values.map((v, index) =>
             <Button key={index} onClick={update(() => props.values.splice(index, 1))}>{v}</Button>
         )}
