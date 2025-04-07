@@ -40,7 +40,7 @@ export function App() {
     return <div style={{display: 'flex', gap: '1mm', flexDirection: 'column', margin: '1.6mm', maxWidth: '100%'}}>
         <div style={{display: 'flex', gap: '1mm', flexWrap: 'wrap', justifyContent: 'flex-start', maxHeight: '21mm', overflow:'hidden'}}>
             {pipe(
-                range(1, 30 + 1),
+                range(-5, 30 + 1),
                 map(v => {
                     return <Button key={v} onClick={add(v)}>{v}</Button>;
                 })
