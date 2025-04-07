@@ -4,8 +4,8 @@ import {state} from "./state.ts";
 
 export function SelectablePanel(props: { children: ReactNode, type: 'attacker' | 'defender' }) {
     const color = {
-        attacker: '#f88',
-        defender: '#88f'
+        attacker: '#f66',
+        defender: '#66f'
     } as const;
     return <div onClick={update(() => state.selected = props.type)} style={{
         flex: 1,
