@@ -1,10 +1,14 @@
 import './app.css'
-import {clone, isDeepEqual, map, pipe, range, sum, filter} from "remeda";
+import {map, pipe, range, sum, filter} from "remeda";
 import {Button} from "./ui/Button.tsx";
 import {state} from "./state.ts";
 import {update} from "./update.ts";
-import {ReactNode} from "preact/compat";
 import {combatRatio} from "./combatRatio.tsx";
+import {nextToChangeRatio} from "./nextToChangeRatio.tsx";
+import {Num} from "./num.tsx";
+import {Proportion} from "./proportion.tsx";
+import {SelectablePanel} from "./selectablePanel.tsx";
+import {RemovableList} from "./removableList.tsx";
 
 const startFrom = 1;
 
@@ -12,23 +16,6 @@ function add(v: number) {
     return update(() => {
         state[state.selected].push(v)
     })
-}
-
-function nextToChangeRatio(tuple: [number, number], whichOne: 0 | 1, byWhat: 1 | -1) {
-    const modified = clone(tuple);
-    const initialRatio = combatRatio(...tuple);
-    if (!initialRatio.every(isFinite)) {
-        return tuple[whichOne];
-    }
-    do {
-        modified[whichOne] += byWhat;
-    } while (modified.every(x => x > 0) && isDeepEqual(initialRatio, combatRatio(...modified)))
-    return Math.abs(modified[whichOne] - tuple[whichOne]);
-}
-
-function Num(props: { children: number }) {
-    const x = props.children;
-    return <>{isFinite(x) ? x : <>&nbsp;</>}</>;
 }
 
 export function App() {
@@ -82,76 +69,3 @@ export function App() {
         </div>
     </div>
 }
-
-function Proportion(props: { children: [ReactNode, ReactNode] }) {
-    return <div style={{display: 'flex', gap: '1mm', flexDirection: 'row', fontSize: '2cm', textAlign: 'center'}}>
-        <SelectablePanel type='attacker'>
-            {props.children[0]}
-        </SelectablePanel>
-        <div style={{textAlign: 'center'}}>
-            :
-        </div>
-        <SelectablePanel type='defender'>
-            {props.children[1]}
-        </SelectablePanel>
-    </div>
-
-}
-
-function SelectablePanel(props: { children: ReactNode, type: 'attacker' | 'defender' }) {
-    const color = {
-        attacker: '#f88',
-        defender: '#88f'
-    } as const;
-    return <div onClick={update(() => state.selected = props.type)} style={{
-        flex: 1,
-        background: color[props.type],
-        borderStyle: 'solid',
-        borderWidth: 5,
-        borderColor: state.selected === props.type ? 'blue' : 'transparent',
-        minHeight: '10mm',
-    }}>
-        {props.children}
-    </div>
-}
-
-function RemovableList(props: { values: number[] }) {
-    return <div style={{
-        display: 'flex',
-        padding: '1mm',
-        alignContent: "center",
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-        gap: "1mm",
-        width: '100%',
-    }}>
-        <Button onClick={update(() => props.values.length = 0)}>X</Button>
-        {props.values.map((v, index) =>
-            <Button key={index} onClick={update(() => props.values.splice(index, 1))}>{v}</Button>
-        )}
-    </div>
-}
-
-// function Foo(props: { label: string, values: Line[] }) {
-//     return <RoundedPanel label={props.label} style={{display: 'flex', flexDirection: 'column', gap: '1mm'}}>
-//         <div style={{display: 'flex', flexDirection: 'row'}}>
-//             {props.values.map((line, index) =>
-//                 <div key={index} style={{display: 'flex', gap: '1mm', flex: 1}}>
-//                     <Button style={{width: 'auto', minWidth: '10mm'}} onClick={update(() => {
-//                         line.values.splice(0, line.values.length)
-//                     })}>{sum(line.values)} =</Button>
-//                     {line.values.map((v, index) =>
-//                         <Button key={index}>
-//                             {v}
-//                         </Button>)}
-//                 </div>
-//             )}
-//             <div style={{display: 'flex', gap: '1mm'}}>
-//                 <Button>½</Button>
-//             </div>
-//         </div>
-//         <div style={{display: 'flex', gap: '1mm', flex: 1}}>
-//             <Button style={{width: 'auto', minWidth: '10mm'}}>+</Button>
-//         </div>
-//     </RoundedPanel>
-// }
