@@ -9,6 +9,7 @@ import {Num} from "./num.tsx";
 import {Proportion} from "./proportion.tsx";
 import {Panel} from "./panel.tsx";
 import {RemovableList} from "./removableList.tsx";
+import {Settings} from "./settings.tsx";
 
 export function App() {
   const attacker = sum(state.attacker);
@@ -58,6 +59,9 @@ export function App() {
       <Panel type='defender'>
         <RemovableList values={state.defender}/>
       </Panel>
+    </div>
+    <div style={{marginTop: '1cm'}}>
+      <Settings/>
     </div>
   </div>
 }
