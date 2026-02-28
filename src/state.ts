@@ -7,6 +7,7 @@ const initialState = {
   selected: 'attacker' as 'attacker' | 'defender',
   selectedLine: 0,
   rounding: 'benefits defender' as RoundingMethod,
+  unit: 1
 };
 
 export const state = clone(initialState);

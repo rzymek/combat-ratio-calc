@@ -38,6 +38,8 @@ export function Settings() {
   const onParsed = useCallback((dsl: DSL<NodeTypes<typeof settingsDsl>>) => {
     setTimeout(update(()=>{
       state.rounding = extractFirst(dsl.result, 'rounding') as RoundingMethod;
+      const unit = Number(extractFirst(dsl.result, 'unit'));
+      state.unit = isFinite(unit) ? unit : 1;
     }),0);
   }, []);
   return <DslEditor

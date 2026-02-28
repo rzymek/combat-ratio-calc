@@ -41,8 +41,8 @@ export function App() {
       gap: '1mm',
       flexDirection: 'row',
     }}>
-      <Keypad count={10} add={(v) => state.attacker.push(v)}/>
-      <Keypad count={10} add={(v) => state.defender.push(v)}/>
+      <Keypad count={30} add={(v) => state.attacker.push(v)}/>
+      <Keypad count={30} add={(v) => state.defender.push(v)}/>
     </div>
 
     <div style={{
@@ -73,7 +73,8 @@ function Keypad(props: { count: number, add: (v: number) => void }) {
     gap: '1mm',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    overflow: 'hidden'
+    maxHeight: `${32}mm`,
+    overflow: 'hidden',
   }}>{pipe(
     range(1, props.count + 1),
     map(v => {
