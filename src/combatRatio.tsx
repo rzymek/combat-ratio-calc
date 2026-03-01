@@ -1,5 +1,6 @@
 import {state} from "./state.ts";
 import {round,floor,ceil} from "./rounding.ts";
+import { keys } from "remeda";
 
 const roundingMethod = {
   'benefits defender': (attacker, defender) => {
@@ -25,6 +26,7 @@ const roundingMethod = {
   }
 } as const satisfies Record<string, typeof combatRatio> ;
 
+export const roundingMethods = keys(roundingMethod);
 export type RoundingMethod = keyof typeof roundingMethod;
 
 export function combatRatio(attacker: number, defender: number): [number, number] {
