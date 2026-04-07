@@ -23,6 +23,13 @@ const roundingMethod = {
     } else {
       return attacker !== 0 ? [1, round(defender / attacker)] : [NaN, NaN];
     }
+  },
+  'round down': (attacker, defender) => {
+    if (attacker > defender) {
+      return defender !== 0 ? [floor(attacker / defender), 1] : [NaN, NaN];
+    } else {
+      return attacker !== 0 ? [1, floor(defender / attacker)] : [NaN, NaN];
+    }
   }
 } as const satisfies Record<string, typeof combatRatio> ;
 
